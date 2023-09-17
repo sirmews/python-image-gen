@@ -1,4 +1,5 @@
 :root {
+	/* Default Light Theme */
 	--bg-color: #f4f4f4;
 	--primary-color: #4285f4;
 	--primary-hover: #357abf;
@@ -6,8 +7,26 @@
 	--input-border-color: #e0e0e0;
 	--input-focus-border-color: #4285f4;
 	--panel-bg-color: #ffffff;
+	--text-color: #222;
 	--shadow-light: 0 0 10px rgba(0, 0, 0, 0.1);
 	--shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+
+	/* Dark Theme Overrides */
+	:root {
+		--bg-color: #121212;
+		--primary-color: #bb86fc;
+		--primary-hover: #aa66db;
+		--input-bg-color: #2d2d2d;
+		--input-border-color: #444;
+		--input-focus-border-color: #bb86fc;
+		--panel-bg-color: #1f1f1f;
+		--text-color: #ddd;
+		--shadow-light: 0 0 10px rgba(255, 255, 255, 0.1);
+		--shadow-dark: 0 4px 6px rgba(255, 255, 255, 0.1);
+	}
 }
 
 /* Reset some browser default styles for better consistency */
@@ -24,6 +43,7 @@ select {
 
 body {
 	font-family: Arial, sans-serif;
+	color: var(--text-color);
 	background-color: var(--bg-color);
 	display: flex;
 	align-items: center;
@@ -61,6 +81,7 @@ textarea {
 	border-radius: 6px;
 	font-size: 16px;
 	background-color: var(--input-bg-color);
+	color: var(--text-color);
 	transition: border-color 0.3s ease;
 }
 
