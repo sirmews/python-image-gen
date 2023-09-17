@@ -1,0 +1,50 @@
+{
+	"name": "Insta Generator",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"forwardPorts": [
+		8000
+	],
+	"postAttachCommand": "flask run --host=0.0.0.0 --port=8000",
+	"containerEnv": {
+		"FLASK_APP": "app/app.py",
+		"FLASK_DEBUG": "1",
+		"FLASK_ENV": "development"
+	},
+	"portsAttributes": {
+		"8000": {
+			"label": "Flask",
+			"onAutoForward": "notify"
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/sshd:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"GitHub.copilot-labs",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"ms-python.isort",
+				"ms-python.vscode-pylance",
+				"ms-azuretools.vscode-docker"
+			],
+			"git.path": "/usr/bin/git",
+			"python.testing.unittestEnabled": false,
+			"python.testing.pytestEnabled": true,
+			"python.formatting.provider": "black",
+			"python.linting.mypyEnabled": true,
+			"python.linting.enabled": true,
+			"jinjatools.intellisense": true
+		}
+	},
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
+	]
+}
