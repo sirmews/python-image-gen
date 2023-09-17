@@ -18,7 +18,7 @@ def load_font_metadata(filename='fonts.json'):
     with open(FONTS_JSON_PATH) as f:
         return json.load(f)
 
-def fetch_and_cache_font(font_url, font_name):
+def fetch_and_cache_font(font_url, font_name, font_size=36):
     """
     Download a font from the given URL and cache it using font_name.
     """
@@ -26,7 +26,7 @@ def fetch_and_cache_font(font_url, font_name):
         response = requests.get(font_url)
         if response.status_code == 200:
             font_file = BytesIO(response.content)
-            font = ImageFont.truetype(font_file, 36)  # You can change the default size here
+            font = ImageFont.truetype(font_file, font_size)  # You can change the default size here
             FONTS_CACHE[font_name] = font
             return font
         else:
@@ -36,7 +36,7 @@ def fetch_and_cache_font(font_url, font_name):
         print(f"An error occurred while downloading {font_name} from {font_url}: {e}")
         return None
 
-def get_font(font_name):
+def get_font(font_name, font_size=36):
     """
     Get a font from the cache. If not in cache, it will try to fetch and cache it.
     """
@@ -48,8 +48,10 @@ def get_font(font_name):
         # inspiration: https://www.seeratawan.me/blog/generating-font-previews-with-python-pillow-for-enhanced-ux/
         for font in fonts_metadata:
             if font['postscript_name'] == font_name:
-                return fetch_and_cache_font(font['url'], font_name)
+                return fetch_and_cache_font(font['url'], font_name, font_size)
         print(f"Font {font_name} not found in fonts.json")
+        # trigger error and exit
+        
         return None
 
 def initialize_fonts():
