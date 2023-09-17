@@ -1,0 +1,118 @@
+:root {
+	--bg-color: #f4f4f4;
+	--primary-color: #4285f4;
+	--primary-hover: #357abf;
+	--input-bg-color: #f9f9f9;
+	--input-border-color: #e0e0e0;
+	--input-focus-border-color: #4285f4;
+	--panel-bg-color: #ffffff;
+	--shadow-light: 0 0 10px rgba(0, 0, 0, 0.1);
+	--shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Reset some browser default styles for better consistency */
+body,
+html,
+div,
+form,
+textarea,
+select {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: var(--bg-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	padding: 20px;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+
+form {
+	background-color: var(--panel-bg-color);
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: var(--shadow-light);
+	width: 100%;
+	max-width: 500px;
+}
+
+input,
+select,
+textarea {
+	width: 100%;
+	padding: 10px 15px;
+	margin-bottom: 10px;
+	border: 1px solid var(--input-border-color);
+	border-radius: 6px;
+	font-size: 16px;
+	background-color: var(--input-bg-color);
+	transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+	border-color: var(--input-focus-border-color);
+	outline: none;
+}
+
+input[type="submit"] {
+	cursor: pointer;
+	background-color: var(--primary-color);
+	color: #ffffff;
+	border: none;
+	transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+	background-color: var(--primary-hover);
+}
+
+div {
+	margin-top: 20px;
+	/* Adds some space between the form and the image */
+	width: 100%;
+	max-width: 500px;
+	display: flex;
+	justify-content: center;
+}
+
+.panel {
+	background-color: var(--panel-bg-color);
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: var(--shadow-dark);
+	margin-bottom: 20px;
+	max-width: 600px;
+	width: 100%;
+}
+
+form.panel {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.image-container {
+	text-align: center;
+}
+
+img {
+	max-width: 100%;
+	border-radius: 8px;
+}

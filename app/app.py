@@ -1,3 +1,4 @@
+import base64
 from io import BytesIO
 
 from flask import Flask, render_template, request, send_file
@@ -5,6 +6,7 @@ from font_loader import get_font, initialize_fonts
 from image_generator import \
     generate_gradient  # Import the function from image_generator.py
 from PIL import Image, ImageDraw, ImageFont
+from social_media_images import SOCIAL_MEDIA_SIZES
 
 app = Flask(__name__)
 
@@ -12,9 +14,17 @@ initialize_fonts()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    image_data = None
     if request.method == 'POST':
         quote = request.form['quote']
-        image = generate_gradient()
+        
+        # Retrieve the selected size
+        selected_size = request.form['platform_size']
+        platform, size_name = selected_size.split('-', 1)
+        width, height = SOCIAL_MEDIA_SIZES[platform][size_name]
+
+        image = generate_gradient(width, height)
+
         image_with_quote = add_quote_to_image(image, quote)
         
         # Create a BytesIO buffer to hold the image data in memory
@@ -22,13 +32,14 @@ def index():
         image_with_quote.save(img_io, format='JPEG')
         img_io.seek(0)
 
-        #return render_template('index.html', image_path="static/generated_image.jpg")
-        # Return the image data directly as the response with the appropriate content type
-        return send_file(img_io, mimetype='image/jpeg', as_attachment=False)
-    return render_template('index.html', image_path=None)
+        # Encode the image into a Data URL format
+        img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
+        image_data = f"data:image/jpeg;base64,{img_base64}"
+
+    return render_template('index.html', image_data=image_data, SOCIAL_MEDIA_SIZES=SOCIAL_MEDIA_SIZES)
 
 def add_quote_to_image(img, quote):
-    font_name = "OpenSans-Light"
+    font_name = "OpenSans-SemiBold"
     font = get_font(font_name)
     draw = ImageDraw.Draw(img)
     #font = ImageFont.load_default()
