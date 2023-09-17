@@ -1,11 +1,14 @@
 from io import BytesIO
 
 from flask import Flask, render_template, request, send_file
+from font_loader import get_font, initialize_fonts
 from image_generator import \
     generate_gradient  # Import the function from image_generator.py
 from PIL import Image, ImageDraw, ImageFont
 
 app = Flask(__name__)
+
+initialize_fonts()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -25,8 +28,10 @@ def index():
     return render_template('index.html', image_path=None)
 
 def add_quote_to_image(img, quote):
+    font_name = "OpenSans-Light"
+    font = get_font(font_name)
     draw = ImageDraw.Draw(img)
-    font = ImageFont.load_default()
+    #font = ImageFont.load_default()
 
     # Calculate the bounding box of the text
     text_bbox = draw.textbbox((0, 0), quote, font=font)
