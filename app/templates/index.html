@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-	<title>Python Insta Generator</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Quote Generator</title>
+</head>
 
 <body>
-	<h1>Hi</h1>
+	<form action="/" method="post">
+		<input type="text" name="quote" placeholder="Enter your quote here" required>
+		<input type="submit" value="Generate Image">
+	</form>
+
+	{% if image_path %}
+	<div>
+		<img src="{{ url_for('static', filename='generated_image.jpg') }}" alt="Generated Quote Image">
+	</div>
+	{% endif %}
 </body>
 
 </html>
