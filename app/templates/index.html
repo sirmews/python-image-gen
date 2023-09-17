@@ -12,7 +12,8 @@
 	<div class="container">
 
 		<form action="/" method="post" class="panel">
-			<textarea name="quote" placeholder="Enter your quote here" required>{{ request.form['quote'] }}</textarea>
+			<textarea name="quote" placeholder="Enter your quote here" required
+				rows="4">{{ request.form['quote'] }}</textarea>
 
 			<!-- Dropdown to select the social media platform and image size -->
 			<select name="platform_size">
@@ -28,15 +29,37 @@
 				{% endfor %}
 			</select>
 
-			<input type="submit" value="Generate Image">
+			<input type="submit" class="button" value="Generate Image">
 		</form>
 
 		{% if image_data %}
 		<div class="image-container">
 			<img src="{{ image_data }}" alt="Generated Quote Image">
 		</div>
+		<button onclick="downloadImage('{{ image_data }}', 'quote_image.jpg')" class="button">Download Image</button>
 		{% endif %}
 	</div>
+	<script>
+		function downloadImage(dataUrl, filename) {
+			// Convert the data URL to a blob
+			fetch(dataUrl)
+				.then(res => res.blob())
+				.then(blob => {
+					// Create a blob URL from the blob
+					const blobUrl = URL.createObjectURL(blob);
+					// Create a link element
+					const a = document.createElement('a');
+					a.href = blobUrl;
+					a.download = filename;
+					// Append the link to the body (this is necessary to make it work in Firefox)
+					document.body.appendChild(a);
+					a.click();
+					// Remove the link from the body
+					document.body.removeChild(a);
+				});
+		}
+
+	</script>
 </body>
 
 </html>
