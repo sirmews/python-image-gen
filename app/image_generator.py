@@ -1,6 +1,12 @@
+import os
 import random
 
+import openai
+import requests
 from PIL import Image, ImageDraw
+
+# Initialize OpenAI with your API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 def generate_gradient(width=500, height=500):
@@ -19,47 +25,34 @@ def generate_gradient(width=500, height=500):
     return base
 
 
-def draw_triangle(draw, x, y, size, color):
-    half_size = size // 2
-    triangle_points = [
-        (x, y - half_size),
-        (x - half_size, y + half_size),
-        (x + half_size, y + half_size),
-    ]
-    draw.polygon(triangle_points, fill=color)
+def generate_ai_background(width, height):
+    """
+    Generate a background image using DALL·E based on a given size.
 
+    Args:
+    - width (int): The width of the image.
+    - height (int): The height of the image.
 
-def draw_square(draw, x, y, size, color):
-    draw.rectangle([(x - size // 2, y - size // 2),
-                    (x + size // 2, y + size // 2)], fill=color)
+    Returns:
+    - PIL.Image: The generated image.
+    """
+    # Using the maximum available size for best resolution
+    size = "1024x1024"
+    prompt = "an artistic and dark abstract background resembling motivation and inspiration, ideal for white text overlay"
 
+    response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size=size
+    )
 
-def draw_circle(draw, x, y, size, color):
-    draw.ellipse([(x - size // 2, y - size // 2),
-                 (x + size // 2, y + size // 2)], fill=color)
+    # Extract URL from the response
+    image_url = response['data'][0]['url']
 
+    # Fetch the image from the URL and convert to PIL Image
+    image = Image.open(requests.get(image_url, stream=True).raw)
 
-def draw_hexagon(draw, x, y, size, color):
-    angle = 360 / 6
-    hexagon = [(x + size * math.cos(math.radians(a)), y + size *
-                math.sin(math.radians(a))) for a in range(0, 360, angle)]
-    draw.polygon(hexagon, fill=color)
+    # Resize the image to desired dimensions
+    image_resized = image.resize((width, height), Image.LANCZOS)
 
-
-def random_dark_color():
-    return (random.randint(0, 128), random.randint(0, 128), random.randint(0, 128))
-
-
-def generate_patterned_shapes(width=500, height=500, shape_size=50):
-    shape_functions = [draw_triangle, draw_square, draw_circle, draw_hexagon]
-    shape = random.choice(shape_functions)
-    color = random_dark_color()
-
-    img = Image.new('RGB', (width, height), (255, 255, 255))
-    draw = ImageDraw.Draw(img)
-
-    for x in range(0, width, shape_size):
-        for y in range(0, height, shape_size):
-            shape(draw, x, y, shape_size, color)
-
-    return img
+    return image_resized

@@ -8,9 +8,8 @@ from image_generator import \
 from image_processing import add_quote_to_image
 from PIL import Image, ImageDraw, ImageFont
 from social_media_images import SOCIAL_MEDIA_SIZES
+from strategies.ai_image_strategy import AIImageStrategy
 from strategies.gradient_image_strategy import GradientImageStrategy
-from strategies.patterned_shapes_image_strategy import \
-    PatternedShapesImageStrategy
 
 app = Flask(__name__)
 
@@ -18,7 +17,7 @@ initialize_fonts()
 
 IMAGE_STRATEGIES = {
     'gradient': GradientImageStrategy(),
-    'patterned_shapes': PatternedShapesImageStrategy()
+    'ai': AIImageStrategy()
 }
 
 
@@ -35,7 +34,7 @@ def index():
         width, height = SOCIAL_MEDIA_SIZES[platform][size_name]
 
         # Choose image generation strategy based on user input
-        image_type = request.form.get('image_type', 'patterned_shapes')
+        image_type = request.form.get('image_type', 'ai')
         strategy = IMAGE_STRATEGIES.get(image_type)
         image = strategy.generate(width, height)
 

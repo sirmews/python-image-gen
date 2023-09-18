@@ -12,6 +12,8 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application
 COPY app/ /app
 
+COPY .env /app
+
 EXPOSE 8000
 
 # Run the application
