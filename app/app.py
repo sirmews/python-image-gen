@@ -8,10 +8,19 @@ from image_generator import \
 from image_processing import add_quote_to_image
 from PIL import Image, ImageDraw, ImageFont
 from social_media_images import SOCIAL_MEDIA_SIZES
+from strategies.gradient_image_strategy import GradientImageStrategy
+from strategies.patterned_shapes_image_strategy import \
+    PatternedShapesImageStrategy
 
 app = Flask(__name__)
 
 initialize_fonts()
+
+IMAGE_STRATEGIES = {
+    'gradient': GradientImageStrategy(),
+    'patterned_shapes': PatternedShapesImageStrategy()
+}
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -19,16 +28,19 @@ def index():
     if request.method == 'POST':
         quote = request.form['quote']
         font_name = "OpenSans-SemiBold"
-        
+
         # Retrieve the selected size
         selected_size = request.form['platform_size']
         platform, size_name = selected_size.split('-', 1)
         width, height = SOCIAL_MEDIA_SIZES[platform][size_name]
 
-        image = generate_gradient(width, height)
+        # Choose image generation strategy based on user input
+        image_type = request.form.get('image_type', 'patterned_shapes')
+        strategy = IMAGE_STRATEGIES.get(image_type)
+        image = strategy.generate(width, height)
 
         image_with_quote = add_quote_to_image(image, quote, font_name)
-        
+
         # Create a BytesIO buffer to hold the image data in memory
         img_io = BytesIO()
         image_with_quote.save(img_io, format='JPEG')
