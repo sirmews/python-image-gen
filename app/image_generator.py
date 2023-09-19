@@ -25,7 +25,7 @@ def generate_gradient(width=500, height=500):
     return base
 
 
-def generate_ai_background(width, height):
+def generate_ai_background(width, height, quote):
     """
     Generate a background image using DALL·E based on a given size.
 
@@ -38,7 +38,8 @@ def generate_ai_background(width, height):
     """
     # Using the maximum available size for best resolution
     size = "1024x1024"
-    prompt = "an artistic and dark abstract background resembling motivation and inspiration, ideal for white text overlay"
+    # add quote to prompt
+    prompt = ("A background pattern, either an abstract or nature theme. The image must not have any light colors and have a darker color scheme. The theme of the image is: " + quote)
 
     response = openai.Image.create(
         prompt=prompt,

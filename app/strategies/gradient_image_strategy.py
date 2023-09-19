@@ -4,5 +4,5 @@ from .image_generation_strategy import ImageGenerationStrategy
 
 
 class GradientImageStrategy(ImageGenerationStrategy):
-    def generate(self, width, height):
-        return generate_gradient(width, height)
+    def generate(self, width, height, quote):
+        return generate_gradient(width, height, quote)

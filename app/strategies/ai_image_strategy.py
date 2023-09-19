@@ -4,5 +4,5 @@ from .image_generation_strategy import ImageGenerationStrategy
 
 
 class AIImageStrategy(ImageGenerationStrategy):
-    def generate(self, width, height):
-        return generate_ai_background(width, height)
+    def generate(self, width, height, quote):
+        return generate_ai_background(width, height, quote)

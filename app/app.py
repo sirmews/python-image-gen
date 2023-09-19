@@ -36,7 +36,7 @@ def index():
         # Choose image generation strategy based on user input
         image_type = request.form.get('image_type', 'ai')
         strategy = IMAGE_STRATEGIES.get(image_type)
-        image = strategy.generate(width, height)
+        image = strategy.generate(width, height, quote)
 
         image_with_quote = add_quote_to_image(image, quote, font_name)
 
